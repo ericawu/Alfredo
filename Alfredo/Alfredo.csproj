@@ -221,7 +221,7 @@
     <Compile Include="Domain\Day.cs" />
     <Compile Include="Domain\Food.cs" />
     <Compile Include="Domain\LuisType.cs" />
-    <Compile Include="Domain\Restaurant.cs" />
+    <Compile Include="Domain\Cafe.cs" />
     <Compile Include="Extensions\LuisExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

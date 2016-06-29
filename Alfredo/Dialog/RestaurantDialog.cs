@@ -13,7 +13,7 @@ namespace Alfredo.Dialog
 {
     [Serializable]
     [LuisModel(Constants.AppId, Constants.SubscriptionId)]
-    public class RestaurantDialog : LuisDialog<Restaurant> // TODO Replace with actual object later
+    public class RestaurantDialog : LuisDialog<Cafe> // TODO Replace with actual object later
     {
         [LuisIntent("find_restaurant")]
         public async Task FindRestaurant(IDialogContext context, LuisResult result)

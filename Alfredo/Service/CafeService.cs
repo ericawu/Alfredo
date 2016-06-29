@@ -47,7 +47,7 @@ namespace Alfredo.Service
             "Café Willows"
         };
 
-        public static Restaurant GetRestaurant(DateTime day, string cafeName)
+        public static Cafe GetRestaurant(DateTime day, string cafeName)
         {
             var webUri = new Uri("https://microsoft.sharepoint.com/sites/refweb/");
             const string userName = Constants.Username;
@@ -77,7 +77,7 @@ namespace Alfredo.Service
                 })
                 .ToDictionary(k => k.DayOfWeekId, v => v.Food);
 
-            return new Restaurant
+            return new Cafe
             {
                 Menu = menu
             };
