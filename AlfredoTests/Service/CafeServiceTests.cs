@@ -17,5 +17,12 @@ namespace Alfredo.Service.Tests
             var day = DateTime.Now;
             CafeService.GetRestaurant(day, CafeService.Cafes[0]);
         }
+
+        [TestMethod()]
+        public void GetFoodIndexTest()
+        {
+            var day = DateTime.Now;
+            CafeService.GetFoodIndex(day, CafeService.Cafes[0]);
+        }
     }
 }

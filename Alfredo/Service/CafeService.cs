@@ -70,6 +70,7 @@ namespace Alfredo.Service
                     Food = g.Select(f => new Food
                     {
                         Name = f.MenuItem,
+                        Cafe = f.CafeName,
                         Description = f.MenuDescription,
                         Price = f.MenuPrice
                     }).ToList()
@@ -107,8 +108,68 @@ namespace Alfredo.Service
                 client.QueryString.Add("$orderby", "DayOfWeekID,StationName");
                 client.QueryString.Add("$top", "700");
 
-                var endpointUri = new Uri(
-                    $"https://microsoft.sharepoint.com/sites/refweb/_api/web/lists/GetByTitle('{listTitle}')/items");
+                var endpointUri =
+                    new Uri(
+                        $"https://microsoft.sharepoint.com/sites/refweb/_api/web/lists/GetByTitle('{listTitle}')/items");
+                var result = client.DownloadString(endpointUri);
+
+                var jsonResp = JsonConvert.DeserializeObject<Result>(result);
+                return jsonResp.D.Results;
+            }
+        }
+
+        public static List<MenuFoodItem> GetFoodIndex(DateTime day, string cafeName)
+        {
+            var webUri = new Uri("https://microsoft.sharepoint.com/sites/refweb/");
+            const string userName = Constants.Username;
+            const string password = Constants.Password;
+            var securePassword = new SecureString();
+
+            foreach (var c in password)
+            {
+                securePassword.AppendChar(c);
+            }
+
+            var credentials = new SharePointOnlineCredentials(userName, securePassword);
+
+            var list = GetFoodIndex(webUri, credentials, "DiningMenus", day, cafeName);
+            var menu = list.GroupBy(f => f.MenuItem.ToLower(), f => f,
+                (k, g) => new
+                {
+                    MenuItem = k,
+                    Food = g.Select(f => new Food
+                    {
+                        Name = f.MenuItem,
+                        Description = f.MenuDescription,
+                        Cafe = f.CafeName,
+                        Price = f.MenuPrice
+                    })
+                }).ToDictionary(k => k.MenuItem, v => v.Food);
+
+            return list;
+        }
+
+        private static List<MenuFoodItem> GetFoodIndex(Uri webUri, ICredentials credentials, string listTitle,
+            DateTime day,
+            string cafeName)
+        {
+            using (var client = new WebClient())
+            {
+                client.Headers.Add("X-FORMS_BASED_AUTH_ACCEPTED", "f");
+                client.Credentials = credentials;
+                client.Headers.Add(HttpRequestHeader.ContentType, "application/json;odata=verbose");
+                client.Headers.Add(HttpRequestHeader.Accept, "application/json;odata=verbose");
+
+                client.QueryString.Add("$select",
+                    "CafeName,StationName,DayOfWeekID,WeekDate,MenuItem,MenuDescription,MenuPrice");
+                client.QueryString.Add("$filter", "WeekDate eq '06/27/2016' and DayOfWeekID eq '1'");
+                client.QueryString.Add("$orderby", "StationName");
+                client.QueryString.Add("$groupby", "MenuItem");
+                client.QueryString.Add("$top", "700");
+
+                var endpointUri =
+                    new Uri(
+                        $"https://microsoft.sharepoint.com/sites/refweb/_api/web/lists/GetByTitle('{listTitle}')/items");
                 var result = client.DownloadString(endpointUri);
 
                 var jsonResp = JsonConvert.DeserializeObject<Result>(result);
@@ -117,17 +178,17 @@ namespace Alfredo.Service
         }
     }
 
-    internal class Result
+    public class Result
     {
         public Menu D { get; set; }
     }
 
-    internal class Menu
+    public class Menu
     {
         public List<MenuFoodItem> Results { get; set; }
     }
 
-    internal class MenuFoodItem
+    public class MenuFoodItem
     {
         public string CafeName { get; set; }
         public string StationName { get; set; }
@@ -137,4 +198,5 @@ namespace Alfredo.Service
         public string WeekDate { get; set; }
         public string DayOfWeekID { get; set; }
     }
+
 }
