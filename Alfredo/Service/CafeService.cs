@@ -154,6 +154,7 @@ namespace Alfredo.Service
                         Name = f.MenuItem,
                         Description = f.MenuDescription,
                         Cafe = f.CafeName,
+                        Restaurant = f.StationName,
                         Price = f.MenuPrice
                     })
                 }).ToDictionary(k => k.MenuItem, v => v.Food);
