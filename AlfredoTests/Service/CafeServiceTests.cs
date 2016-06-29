@@ -15,7 +15,7 @@ namespace Alfredo.Service.Tests
         public void GetListTest()
         {
             var day = DateTime.Now;
-            CafeService.GetRestaurant(day, CafeService.Cafes[0]);
+            CafeService.GetCafe(day, CafeService.Cafes[0]);
         }
 
         [TestMethod()]

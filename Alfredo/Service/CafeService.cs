@@ -48,7 +48,7 @@ namespace Alfredo.Service
             "Café Willows"
         };
 
-        public static Cafe GetRestaurant(DateTime day, string cafeName)
+        public static Cafe GetCafe(DateTime day, string cafeName)
         {
             cafeName = GetInvariantCafeName(cafeName);
             var webUri = new Uri("https://microsoft.sharepoint.com/sites/refweb/");
