@@ -33,7 +33,7 @@ namespace Alfredo.Dialog
             context.ConversationData.SetValue(LuisType.Menu, menu);
             context.ConversationData.SetValue(LuisType.Cafe, cafe);
 
-            var menudict = CafeService.GetRestaurant(DateTime.Now, "Café 9");
+            var menudict = CafeService.GetCafe(DateTime.Now, cafe);
             var menulist = menudict.Menu[Day.Wednesday];
 
             var s = string.Join(", ", menulist.Select(m => m.Name));
