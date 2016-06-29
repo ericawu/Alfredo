@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Threading.Tasks;
 using Alfredo.Resource;
 using Microsoft.Bot.Builder.Dialogs;
@@ -6,6 +7,8 @@ using Microsoft.Bot.Builder.Luis;
 using Microsoft.Bot.Builder.Luis.Models;
 using Alfredo.Extensions;
 using Alfredo.Domain;
+using System.Linq;
+using Alfredo.Service;
 
 
 
@@ -30,7 +33,13 @@ namespace Alfredo.Dialog
             context.ConversationData.SetValue(LuisType.Menu, menu);
             context.ConversationData.SetValue(LuisType.Cafe, cafe);
 
-            await context.PostAsync($"You're looking for {cafe}?");
+            var menudict = CafeService.GetRestaurant(DateTime.Now, "Café 9");
+            var menulist = menudict.Menu[Day.Wednesday];
+
+            var s = string.Join(", ", menulist.Select(m => m.Name));
+            
+            await context.PostAsync($"{s}");
+
             context.Done(0);
         }
     }
