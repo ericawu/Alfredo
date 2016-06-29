@@ -15,14 +15,26 @@ namespace Alfredo.Service.Tests
         public void GetListTest()
         {
             var day = DateTime.Now;
-            CafeService.GetCafe(day, CafeService.Cafes[0]);
+
+            CafeService.GetCafe(day, "Cafe 31");
+
+            CafeService.GetCafe(day, "café 31");
+
+            CafeService.GetCafe(day, "cafe 31");
         }
 
         [TestMethod()]
         public void GetFoodIndexTest()
         {
             var day = DateTime.Now;
-            CafeService.GetFoodIndex(day, CafeService.Cafes[0]);
+            var result1 = CafeService.GetFoodIndex(day, "Cafe 31");
+            Assert.AreNotEqual(0, result1.Count);
+
+            var result2 = CafeService.GetFoodIndex(day, "café 31");
+            Assert.AreNotEqual(0, result2.Count);
+
+            var result3 = CafeService.GetFoodIndex(day, "cafe 31");
+            Assert.AreNotEqual(0, result3.Count);
         }
     }
 }

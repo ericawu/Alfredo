@@ -129,7 +129,7 @@ namespace Alfredo.Service
             }
         }
 
-        public static List<MenuFoodItem> GetFoodIndex(DateTime day, string cafeName)
+        public static Dictionary<string, IEnumerable<Food>> GetFoodIndex(DateTime day, string cafeName)
         {
             cafeName = GetInvariantCafeName(cafeName);
             var webUri = new Uri("https://microsoft.sharepoint.com/sites/refweb/");
@@ -158,7 +158,7 @@ namespace Alfredo.Service
                     })
                 }).ToDictionary(k => k.MenuItem, v => v.Food);
 
-            return list;
+            return menu;
         }
 
         private static List<MenuFoodItem> GetFoodIndex(Uri webUri, ICredentials credentials, string listTitle,
