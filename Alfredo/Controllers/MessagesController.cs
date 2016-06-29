@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Microsoft.Bot.Connector;
-using Microsoft.Bot.Connector.Utilities;
+using Microsoft.Bot.Builder;
 using Newtonsoft.Json;
+using Microsoft.Bot.Builder.Dialogs;
 
 namespace Alfredo
 {
@@ -22,11 +23,7 @@ namespace Alfredo
         {
             if (message.Type == "Message")
             {
-                // calculate something for us to return
-                int length = (message.Text ?? string.Empty).Length;
-
-                // return our reply to the user
-                return message.CreateReplyMessage($"You sent {length} characters");
+                return await Conversation.SendAsync(message, () => new RestaurantDialog());
             }
             else
             {
@@ -55,6 +52,7 @@ namespace Alfredo
             }
             else if (message.Type == "UserAddedToConversation")
             {
+                return message.CreateReplyMessage($"Hi there! My name is Alfredo.");
             }
             else if (message.Type == "UserRemovedFromConversation")
             {
@@ -62,7 +60,7 @@ namespace Alfredo
             else if (message.Type == "EndOfConversation")
             {
             }
-
+            
             return null;
         }
     }
