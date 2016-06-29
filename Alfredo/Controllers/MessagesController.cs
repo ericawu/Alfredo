@@ -1,16 +1,12 @@
-﻿using System;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.Description;
+using Alfredo.Dialog;
+using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using Microsoft.Bot.Builder;
 using Newtonsoft.Json;
-using Microsoft.Bot.Builder.Dialogs;
 
-namespace Alfredo
+namespace Alfredo.Controllers
 {
     [BotAuthentication]
     public class MessagesController : ApiController
@@ -19,7 +15,7 @@ namespace Alfredo
         /// POST: api/Messages
         /// Receive a message from a user and reply to it
         /// </summary>
-        public async Task<Message> Post([FromBody]Message message)
+        public async Task<Message> Post([FromBody] Message message)
         {
             if (message.Type == "Message")
             {
@@ -60,7 +56,7 @@ namespace Alfredo
             else if (message.Type == "EndOfConversation")
             {
             }
-            
+
             return null;
         }
     }

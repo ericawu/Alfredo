@@ -9,7 +9,7 @@ using Alfredo.Domain;
 
 
 
-namespace Alfredo
+namespace Alfredo.Dialog
 {
     [Serializable]
     [LuisModel(Constants.AppId, Constants.SubscriptionId)]
