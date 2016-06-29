@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Security;
 using Alfredo.Domain;
+using Alfredo.Extensions;
 using Alfredo.Resource;
 using Microsoft.SharePoint.Client;
 using Newtonsoft.Json;
@@ -47,8 +48,9 @@ namespace Alfredo.Service
             "Café Willows"
         };
 
-        public static Cafe GetRestaurant(DateTime day, string cafeName)
+        public static Cafe GetCafe(DateTime day, string cafeName)
         {
+            cafeName = GetInvariantCafeName(cafeName);
             var webUri = new Uri("https://microsoft.sharepoint.com/sites/refweb/");
             const string userName = Constants.Username;
             const string password = Constants.Password;
@@ -81,6 +83,15 @@ namespace Alfredo.Service
             {
                 Menu = menu
             };
+        }
+
+        private static string GetInvariantCafeName(string cafeName)
+        {
+            cafeName = cafeName.ReplaceDiacritics();
+            var index = Cafes
+                .ToList()
+                .FindIndex(cafe => string.Equals(cafe.ReplaceDiacritics(), cafeName, StringComparison.CurrentCultureIgnoreCase));
+            return Cafes[index];
         }
 
         /// <summary>
@@ -118,8 +129,9 @@ namespace Alfredo.Service
             }
         }
 
-        public static List<MenuFoodItem> GetFoodIndex(DateTime day, string cafeName)
+        public static Dictionary<string, IEnumerable<Food>> GetFoodIndex(DateTime day, string cafeName)
         {
+            cafeName = GetInvariantCafeName(cafeName);
             var webUri = new Uri("https://microsoft.sharepoint.com/sites/refweb/");
             const string userName = Constants.Username;
             const string password = Constants.Password;
@@ -146,7 +158,7 @@ namespace Alfredo.Service
                     })
                 }).ToDictionary(k => k.MenuItem, v => v.Food);
 
-            return list;
+            return menu;
         }
 
         private static List<MenuFoodItem> GetFoodIndex(Uri webUri, ICredentials credentials, string listTitle,

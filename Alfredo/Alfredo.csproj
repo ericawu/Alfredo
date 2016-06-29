@@ -223,6 +223,7 @@
     <Compile Include="Domain\LuisType.cs" />
     <Compile Include="Domain\Cafe.cs" />
     <Compile Include="Extensions\LuisExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
